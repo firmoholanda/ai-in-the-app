@@ -1,22 +1,46 @@
 {
   "name": "ai-in-the-app",
   "version": "1.0.0",
-  "main": "index.ts",
+  "main": "expo-router/entry",
   "dependencies": {
+    "@ai-sdk/anthropic": "^4.0.102",
+    "@ai-sdk/react": "^4.0.173",
+    "@expo/metro-runtime": "~58.0.17",
+    "@react-native-async-storage/async-storage": "2.2.0",
+    "@stardazed/streams-text-encoding": "^1.0.2",
+    "@ungap/structured-clone": "^1.4.0",
+    "ai": "^7.0.169",
     "expo": "~58.0.24",
+    "expo-calendar": "~58.0.6",
+    "expo-constants": "~58.0.16",
+    "expo-linking": "~58.0.17",
+    "expo-location": "~58.0.21",
+    "expo-network": "~58.0.5",
+    "expo-router": "~58.0.31",
+    "expo-server": "~58.1.0",
     "expo-status-bar": "~58.0.5",
     "react": "19.3.0",
-    "react-native": "0.88.1"
+    "react-dom": "19.3.0",
+    "react-native": "0.88.1",
+    "react-native-safe-area-context": "~5.11.1",
+    "react-native-screens": "~4.30.1",
+    "react-native-web": "^0.21.4",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@types/react": "~19.3.0",
+    "@types/ungap__structured-clone": "^1.2.0",
+    "eslint": "^9.0.0",
+    "eslint-config-expo": "~58.0.4",
     "typescript": "~6.0.3"
   },
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "typecheck": "tsc --noEmit",
+    "lint": "expo lint"
   },
   "private": true
 }

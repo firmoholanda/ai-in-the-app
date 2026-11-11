@@ -1,13 +1,14 @@
 {
   "expo": {
-    "name": "ai-in-the-app",
+    "name": "ai in the app",
     "slug": "ai-in-the-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "io.github.firmoholanda.aiintheapp"
     },
     "android": {
       "adaptiveIcon": {
@@ -16,10 +17,29 @@
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "io.github.firmoholanda.aiintheapp"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
-    }
+      "favicon": "./assets/favicon.png",
+      "output": "server"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Your location is shared with the assistant only when you ask something that needs it."
+        }
+      ],
+      [
+        "expo-calendar",
+        {
+          "writeOnlyAccess": true,
+          "writeOnlyCalendarPermission": "The assistant can draft calendar events for you to review and save."
+        }
+      ]
+    ],
+    "scheme": "aiintheapp"
   }
 }
