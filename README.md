@@ -103,6 +103,7 @@ sequenceDiagram
 | 💬 | [`src/app/index.tsx`](src/app/index.tsx) | Chat screen: `useChat`, `onToolCall`, offline queue, persistence |
 | 🧱 | [`src/components/`](src/components) | Message bubble and tool card |
 | 🎨 | [`src/theme.ts`](src/theme.ts) | Colors (light/dark) and golden-ratio spacing |
+| 🧪 | [`src/__tests__/`](src/__tests__), [`src/lib/__tests__/`](src/lib/__tests__) | Jest tests for the API route, tools, native tools, storage and API URL |
 
 ## 🚀 Run it
 
@@ -131,19 +132,26 @@ npx expo run:ios            # or: npx expo run:android
 
 ```bash
 npx expo export --platform web
-npx eas-cli@latest deploy
+npx eas-cli@latest deploy --prod
 ```
 
-Then set `EXPO_PUBLIC_API_BASE_URL` to the deployed URL before building the release app,
-and add `ANTHROPIC_API_KEY` to the hosting environment.
+Then set `EXPO_PUBLIC_API_BASE_URL` to the **production URL** (for example `https://ai-in-the-app.expo.app`)
+before building the release app, and add `ANTHROPIC_API_KEY` to the hosting environment.
+
+> [!WARNING]
+> Without `--prod`, each deploy gets its own address (`…--<id>.expo.app`) that never changes.
+> Pointing the app at one of those keeps it on old code after you redeploy.
 
 ## ✅ Checks
 
 ```bash
 npm run typecheck
 npm run lint
+npm test          # Jest + jest-expo; use `npm run test:watch` while developing
 npx expo-doctor
 ```
+
+The tests mock the native modules and the model, so they run without a device, network or API key.
 
 ## 🔭 Ideas for next steps
 
