@@ -39,6 +39,8 @@ and the chat keeps working when the connection drops.
 <img src="docs/screenshot-1-empty.png" alt="Empty chat with suggested prompts" width="260" />
 &nbsp;
 <img src="docs/screenshot-2-weather.png" alt="Weather reply with location and weather tool cards" width="260" />
+&nbsp;
+<img src="docs/screenshot-3-calendar.png" alt="Native calendar sheet opened by the assistant" width="260" />
 
 </div>
 
