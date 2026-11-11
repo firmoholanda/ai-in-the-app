@@ -18,12 +18,27 @@ and the chat keeps working when the connection drops.
 ![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-1E7A55?style=for-the-badge)
 
+[🎬 Demo](#-demo) ·
 [✨ Features](#-what-it-does) ·
 [🧭 How it works](#-how-it-works) ·
 [🗂️ Project map](#️-project-map) ·
 [🚀 Run it](#-run-it) ·
 [☁️ Deploy](#️-deploy-the-api) ·
 [🔭 Next steps](#-ideas-for-next-steps)
+
+</div>
+
+---
+
+## 🎬 Demo
+
+<div align="center">
+
+<a href="docs/demo.mp4">▶️ Watch the demo video</a>
+
+<img src="docs/screenshot-1-empty.png" alt="Empty chat with suggested prompts" width="260" />
+&nbsp;
+<img src="docs/screenshot-2-weather.png" alt="Weather reply with location and weather tool cards" width="260" />
 
 </div>
 
