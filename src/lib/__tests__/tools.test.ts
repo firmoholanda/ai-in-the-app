@@ -34,6 +34,19 @@ describe('getWeather', () => {
     expect(url).toContain('longitude=-122.42');
   });
 
+  it('rejects out-of-range coordinates before any request is made', () => {
+    const schema = schemaOf(tools.getWeather);
+    expect(schema.safeParse({ latitude: 91, longitude: 0, placeName: 'x' }).success).toBe(false);
+    expect(schema.safeParse({ latitude: 0, longitude: -181, placeName: 'x' }).success).toBe(false);
+    expect(schema.safeParse({ latitude: -90, longitude: 180, placeName: 'x' }).success).toBe(true);
+  });
+
+  it('passes an abort signal so a slow weather service cannot hang the request', async () => {
+    const fetchMock = jest.spyOn(globalThis, 'fetch').mockResolvedValue({ ok: true, json: async () => weatherResponse } as Response);
+    await run({ latitude: 0, longitude: 0, placeName: 'x' });
+    expect(fetchMock.mock.calls[0][1]?.signal).toBeInstanceOf(AbortSignal);
+  });
+
   it('throws when the weather service fails', async () => {
     jest.spyOn(globalThis, 'fetch').mockResolvedValue({ ok: false, status: 503 } as Response);
     await expect(run({ latitude: 0, longitude: 0, placeName: 'x' })).rejects.toThrow('Weather service returned 503');

@@ -39,13 +39,21 @@ type DraftEvent = {
  * primary writable calendar.
  */
 export async function draftCalendarEvent(event: DraftEvent) {
+  // Fail early on bad model output, before bothering the user with a permission prompt.
+  const startDate = new Date(event.startISO);
+  const endDate = new Date(event.endISO);
+  if (Number.isNaN(startDate.getTime()) || Number.isNaN(endDate.getTime())) {
+    throw new Error('The event has an invalid start or end date.');
+  }
+  if (endDate <= startDate) throw new Error('The event must end after it starts.');
+
   const { status } = await Calendar.requestCalendarPermissions(true);
   if (status !== 'granted') throw new Error('Calendar permission was not granted.');
 
   const details = {
     title: event.title,
-    startDate: new Date(event.startISO),
-    endDate: new Date(event.endISO),
+    startDate,
+    endDate,
     location: event.location,
     notes: event.notes,
   };
