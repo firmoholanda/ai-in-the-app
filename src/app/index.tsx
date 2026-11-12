@@ -30,6 +30,8 @@ const SUGGESTIONS = [
   'Where am I right now?',
 ];
 
+const toolErrorText = (e: unknown) => (e instanceof Error ? e.message : 'The phone could not run this action.');
+
 /** Loads saved history first, then mounts the chat with it. */
 export default function ChatScreen() {
   const [initial, setInitial] = useState<{ messages: ChatMessage[]; queue: string[] } | null>(null);
@@ -76,23 +78,16 @@ function Chat({
     onToolCall({ toolCall }) {
       if (toolCall.dynamic) return;
       const { toolCallId } = toolCall;
-      const fail = (tool: 'getDeviceLocation' | 'draftCalendarEvent') => (e: unknown) =>
-        addToolOutput({
-          tool,
-          toolCallId,
-          state: 'output-error',
-          errorText: e instanceof Error ? e.message : 'The phone could not run this action.',
-        });
 
       // Not awaited on purpose: the SDK expects addToolOutput to be called later.
       if (toolCall.toolName === 'getDeviceLocation') {
         getDeviceLocation()
           .then((output) => addToolOutput({ tool: 'getDeviceLocation', toolCallId, output }))
-          .catch(fail('getDeviceLocation'));
+          .catch((e) => addToolOutput({ tool: 'getDeviceLocation', toolCallId, state: 'output-error', errorText: toolErrorText(e) }));
       } else if (toolCall.toolName === 'draftCalendarEvent') {
         draftCalendarEvent(toolCall.input)
           .then((output) => addToolOutput({ tool: 'draftCalendarEvent', toolCallId, output }))
-          .catch(fail('draftCalendarEvent'));
+          .catch((e) => addToolOutput({ tool: 'draftCalendarEvent', toolCallId, state: 'output-error', errorText: toolErrorText(e) }));
       }
     },
     // Once every phone-side tool has a result, continue the conversation automatically.

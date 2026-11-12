@@ -1,6 +1,8 @@
 import { tool, type InferUITools, type UIDataTypes, type UIMessage } from 'ai';
 import { z } from 'zod';
 
+const WEATHER_TIMEOUT_MS = 8_000;
+
 /**
  * Tool definitions shared by the API route (runtime) and the app (types only).
  *
@@ -14,15 +16,15 @@ export const tools = {
     description:
       'Get the current weather and today’s min/max for a latitude/longitude. Use getDeviceLocation first if the user means "here".',
     inputSchema: z.object({
-      latitude: z.number(),
-      longitude: z.number(),
+      latitude: z.number().min(-90).max(90),
+      longitude: z.number().min(-180).max(180),
       placeName: z.string().describe('Human-readable place name for display'),
     }),
     execute: async ({ latitude, longitude, placeName }) => {
       const url =
         `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}` +
         '&current=temperature_2m,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=1';
-      const res = await fetch(url);
+      const res = await fetch(url, { signal: AbortSignal.timeout(WEATHER_TIMEOUT_MS) });
       if (!res.ok) throw new Error(`Weather service returned ${res.status}`);
       const data = await res.json();
       return {

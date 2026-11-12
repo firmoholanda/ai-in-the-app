@@ -1,7 +1,6 @@
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
 import { font, radius, space, useColors } from '@/theme';
-import React from 'react';
 
 type Props = {
   icon: string;

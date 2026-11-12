@@ -1,6 +1,6 @@
 import { streamText } from 'ai';
 
-import { POST } from '@/app/api/chat+api';
+import { MAX_MESSAGES, POST } from '@/app/api/chat+api';
 
 jest.mock('@ai-sdk/anthropic', () => ({ anthropic: jest.fn((model: string) => ({ model })) }));
 jest.mock('ai', () => ({
@@ -57,5 +57,22 @@ describe('POST /api/chat', () => {
     const options = jest.mocked(streamText).mock.calls[0][0];
     expect(Object.keys(options.tools ?? {})).toEqual(['getWeather', 'getDeviceLocation', 'draftCalendarEvent']);
     expect(options.stopWhen).toEqual({ steps: 5 });
+  });
+});
+
+describe('POST /api/chat input validation', () => {
+  const post = (body: string) => POST(new Request('http://localhost/api/chat', { method: 'POST', body }));
+
+  it.each([
+    ['malformed JSON', '{nope'],
+    ['a missing messages field', '{}'],
+    ['a non-array messages field', JSON.stringify({ messages: 'hi' })],
+    ['an empty messages array', JSON.stringify({ messages: [] })],
+    ['too many messages', JSON.stringify({ messages: Array.from({ length: MAX_MESSAGES + 1 }, () => ({})) })],
+  ])('rejects %s with 400 and never calls the model', async (_name, body) => {
+    const res = await post(body);
+    expect(res.status).toBe(400);
+    expect(await res.json()).toEqual({ error: expect.any(String) });
+    expect(streamText).not.toHaveBeenCalled();
   });
 });

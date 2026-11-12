@@ -80,6 +80,15 @@ describe('draftCalendarEvent', () => {
     Platform.OS = originalOS;
   });
 
+  it.each([
+    ['an unparseable start', { ...event, startISO: 'tomorrow-ish' }, 'invalid start or end date'],
+    ['an unparseable end', { ...event, endISO: '' }, 'invalid start or end date'],
+    ['an end before the start', { ...event, endISO: '2026-11-12T09:00:00+00:00' }, 'must end after it starts'],
+  ])('rejects %s without asking for permission', async (_name, bad, message) => {
+    await expect(draftCalendarEvent(bad)).rejects.toThrow(message);
+    expect(calendar.requestCalendarPermissions).not.toHaveBeenCalled();
+  });
+
   it('throws when calendar permission is denied', async () => {
     calendar.requestCalendarPermissions.mockResolvedValue({ status: 'denied' } as never);
     await expect(draftCalendarEvent(event)).rejects.toThrow('Calendar permission was not granted.');
